@@ -812,12 +812,13 @@ function pillar(x,z,r,h,c){
 }
 function waterBox(cx,cz,w,d,h){
   cx*=SC;cz*=SC;w*=SC;d*=SC;
-  const m=new THREE.Mesh(new THREE.BoxGeometry(w,.6*SC,d),new THREE.MeshStandardMaterial({color:0x1b6fa8,emissive:0x06304d,roughness:.15,metalness:.2}));
-  m.position.set(cx,.3*SC,cz);mapG.add(m);addB(cx,cz,w,d,h*SC);
+  const m=new THREE.Mesh(new THREE.BoxGeometry(w,.04*SC,d),new THREE.MeshStandardMaterial({color:0x1b6fa8,emissive:0x06304d,roughness:.15,metalness:.2}));
+  m.position.set(cx,.02*SC,cz);mapG.add(m);
+  addB(cx,cz,w,d,Math.max(h*SC,2.5));   /* tall enough that bullets are stopped by it */
 }
 function bridge(cx,cz,w,d){
-  const m=new THREE.Mesh(new THREE.BoxGeometry(w*SC,.5*SC,d*SC),goldMat);
-  m.position.set(cx*SC,.8*SC,cz*SC);mapG.add(m);
+  const m=new THREE.Mesh(new THREE.BoxGeometry(w*SC,.12*SC,d*SC),goldMat);
+  m.position.set(cx*SC,.08*SC,cz*SC);mapG.add(m);
 }
 function stoneOuter(){
   const t=3,h=6,c=0x4c5566;
@@ -1331,7 +1332,7 @@ function hostUpdate(dt){
       if(e.avd>0){e.avd-=dt;const a=e.aside*1.15,c=Math.cos(a),s=Math.sin(a);const nx=ux*c-uz*s,nz=ux*s+uz*c;ux=nx;uz=nz;}
       if(T.zig){e.zg+=dt*6;const s=Math.sin(e.zg)*.7;const qx=-uz,qz=ux;ux+=qx*s;uz+=qz*s;const l2=Math.hypot(ux,uz)||1;ux/=l2;uz/=l2;}
       const ox=e.x,oz=e.z;
-      e.x+=ux*T.sp*dt;e.z+=uz*T.sp*dt;
+      for(let sub=0;sub<4;sub++){e.x+=ux*T.sp*dt/4;e.z+=uz*T.sp*dt/4;pushOut(e,T.r);}
       for(const o of list){
         if(o===e)continue;
         const ex=e.x-o.x,ez=e.z-o.z;
